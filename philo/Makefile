@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: evocatur <evocatur@student.42.fr>          +#+  +:+       +#+         #
+#    By: fborroto <fborroto@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/09 12:22:16 by evocatur          #+#    #+#              #
-#    Updated: 2023/08/09 13:01:09 by evocatur         ###   ########.fr        #
+#    Updated: 2023/09/06 13:14:28 by fborroto         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = philosophers
 
 SRCS = $(MAIN_SRC)
 
-MAIN_SRC = *.c
+MAIN_SRC = src/*.c
 
 OBJ = *.o
 
@@ -28,13 +28,13 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@echo "     - Compiling $(NAME)..." 
-	@${CC} $(FLAGS) $(OBJ) -o $(NAME)
+	@${CC} -pthread $(FLAGS) $(OBJ) -o $(NAME)
 	@echo "- Compiled -"
 	@${RM} $(OBJ)
 	
 $(OBJ): $(SRCS)
 	@echo "     - Making object files..." 
-	@${CC} -c $(SRCS)
+	@${CC} -pthread -c $(SRCS)
 
 exe: all
 	@echo "     - Executing $(NAME)..."
@@ -45,3 +45,9 @@ leaks: all
 	@echo "     - Executing $(NAME) with leaks command..."
 	@leaks --atExit -- ./$(NAME) 3 20 4 2 1
 	@echo "     - Done -"
+
+clean: 
+	@${RM} ${OBJ}
+
+fclean: clean
+	@${RM} ${NAME}
