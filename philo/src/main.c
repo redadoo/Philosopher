@@ -3,50 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fborroto <fborroto@student.42.fr>          +#+  +:+       +#+        */
+/*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 12:17:57 by evocatur          #+#    #+#             */
-/*   Updated: 2023/09/06 13:18:13 by fborroto         ###   ########.fr       */
+/*   Updated: 2023/09/06 20:23:37 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void *myThreadFun(void *vargp)
+void	*philo_routine(void *vargp)
 {
-    int *ts = (int *)malloc(sizeof(int));
-    *ts = 5;
-    return ts;
+	struct timeval current_time;
+	gettimeofday(&current_time, NULL);
+    t_platone *philo = (t_platone *)vargp;
+	philo->state = SLEEP;
+    if (philo->state == DEAD)
+        return NULL;
+    if (philo->state == SLEEP)
+	{
+		usleep(philo->info.time_to_sleep * 1000);
+		gettimeofday(&current_time, NULL);
+ 	 	printf("seconds : %ld\n micro seconds : %ld\n",
+    		current_time.tv_sec, current_time.tv_usec);
+	}
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-    int             i;
-    int             *result;
-    t_philosophers  p;
-    pthread_t       newthread;
-
+	int				    i;
+	pthread_t		    newthread;
+	t_platone		    *platone;
+	t_philosophers_info info;
+    
+	if (argc < 5)
+		exit(0);
+    
+    info = init_info(info, argv);
+    platone = init_platones(info);
     i = 0;
-    
-    if (argc < 5)
-        exit(0);
-
-
-    p.number_of_philosophers = atoi(argv[1]);
-    p.time_to_die = atoi(argv[2]);
-    p.time_to_eat = atoi(argv[3]);
-    p.time_to_sleep = atoi(argv[4]);
-    p.each_philo_must_eat = atoi(argv[5]);
-    
-    while (i < p.number_of_philosophers)
-    {
-        pthread_create(&newthread, NULL, myThreadFun, NULL);        
-        i++;
-    }
-    
-
-
-    pthread_join(newthread, (void *)&result);
-    printf("%i\n",*result);
-    return 0;
+	while (i < info.number_of_philosophers)
+	{
+		pthread_create(&newthread, NULL, philo_routine, platone);
+		pthread_join(newthread, NULL);
+        platone = platone->next;
+		i++;
+	}
+	pthread_exit(&newthread);
+	return (0);
 }

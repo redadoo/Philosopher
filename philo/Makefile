@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fborroto <fborroto@student.42.fr>          +#+  +:+       +#+         #
+#    By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/09 12:22:16 by evocatur          #+#    #+#              #
-#    Updated: 2023/09/06 13:14:28 by fborroto         ###   ########.fr        #
+#    Updated: 2023/09/06 20:08:46 by edoardo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,12 +38,12 @@ $(OBJ): $(SRCS)
 
 exe: all
 	@echo "     - Executing $(NAME)..."
-	@./$(NAME) 3 20 4 2 1
+	@./$(NAME) 3 20 10 200 1
 	@echo "     - Done -"
 
 leaks: all
 	@echo "     - Executing $(NAME) with leaks command..."
-	@leaks --atExit -- ./$(NAME) 3 20 4 2 1
+	@valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) 3 20 4 2 1
 	@echo "     - Done -"
 
 clean: 
