@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 17:12:01 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/06 20:05:43 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/08 18:43:44 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ static t_platone *platone_friends(t_platone *friends, int i)
 	friends->index = i;
 	friends->fork = true;
 	friends->state = 0;
+	friends->last_meal = 0;
+	friends->time_start = ft_get_time();
 	return (friends);
 }
 
@@ -56,4 +58,13 @@ t_platone *init_platones(t_philosophers_info info)
 	friends->next = tmp2;
 	tmp2->prev = friends;
 	return	(tmp2);
+}
+
+
+unsigned long	ft_get_time(void)
+{
+	struct timeval	time;
+
+	gettimeofday(&time, NULL);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }

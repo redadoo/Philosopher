@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 12:15:46 by evocatur          #+#    #+#             */
-/*   Updated: 2023/09/06 19:53:06 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/08 18:44:01 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,15 @@ typedef struct s_platone
 {
 	int					index;
 	bool				fork;
+	unsigned long		last_meal;
+	unsigned long		time_start;
 	enum e_state		state;
 	struct s_platone	*next;
 	struct s_platone	*prev;
 	t_philosophers_info	info;
 }						t_platone;
 
+unsigned long			ft_get_time(void);
 void					*philo_routine(void *vargp);
 t_platone				*init_platones(t_philosophers_info info);
 int						ft_atoi(const char *nptr);
