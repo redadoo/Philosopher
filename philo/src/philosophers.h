@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 12:15:46 by evocatur          #+#    #+#             */
-/*   Updated: 2023/09/08 18:44:01 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/09 14:22:02 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ enum					e_state
 	DEAD = 1,
 	THINK = 2,
 	SLEEP = 3,
+	EAT = 4,
 };
 
 typedef struct s_philosophers_info
@@ -40,12 +41,13 @@ typedef struct s_philosophers_info
 typedef struct s_platone
 {
 	int					index;
-	bool				fork;
 	unsigned long		last_meal;
 	unsigned long		time_start;
 	enum e_state		state;
+	pthread_mutex_t		fork;
 	struct s_platone	*next;
 	struct s_platone	*prev;
+	pthread_t		    newthread;
 	t_philosophers_info	info;
 }						t_platone;
 

@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 17:12:01 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/08 18:43:44 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/09 14:15:29 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ t_philosophers_info init_info(t_philosophers_info philo, char **argv)
 static t_platone *platone_friends(t_platone *friends, int i)
 {
 	friends->index = i;
-	friends->fork = true;
-	friends->state = 0;
+	pthread_mutex_init(&friends->fork, NULL);
+	friends->state = ALIVE;
 	friends->last_meal = 0;
 	friends->time_start = ft_get_time();
 	return (friends);

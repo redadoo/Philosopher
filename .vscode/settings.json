@@ -3,6 +3,7 @@
         "*.c": "c",
         "stdio.h": "c",
         "philosophers.h": "c",
-        "pthread.h": "c"
+        "pthread.h": "c",
+        "string.h": "c"
     }
 }
