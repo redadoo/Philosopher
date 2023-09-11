@@ -5,20 +5,38 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/06 17:12:01 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/11 16:22:44 by edoardo          ###   ########.fr       */
+/*   Created: 2023/09/11 17:39:52 by edoardo           #+#    #+#             */
+/*   Updated: 2023/09/11 19:26:43 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	ft_sleep(size_t milliseconds)
+int	ft_atoi(const char *nptr)
 {
-	size_t	start;
+	unsigned int	i;
+	int				result;
+	char			sign;
 
-	start = ft_get_time();
-	while ((ft_get_time() - start) < milliseconds)
-		usleep(500);
+	i = 0;
+	result = 0;
+	sign = 0;
+	while ((nptr[i] >= 9 && nptr[i] <= 13) || nptr[i] == 32)
+		i++;
+	if (nptr[i] == '-' || nptr[i] == '+')
+	{
+		sign = nptr[i];
+		i++;
+	}
+	while (nptr[i] != '\0' && (nptr[i] >= '0' && nptr[i] <= '9'))
+	{
+		result *= 10;
+		result += nptr[i] - '0';
+		i++;
+	}
+	if (sign == '-')
+		result *= -1;
+	return (result);
 }
 
 t_philosophers_info init_info(t_philosophers_info philo, char **argv)
@@ -28,20 +46,37 @@ t_philosophers_info init_info(t_philosophers_info philo, char **argv)
 	philo.time_to_eat = ft_atoi(argv[3]);
 	philo.time_to_sleep = ft_atoi(argv[4]);
 	if (argv[5] != 0)
+	{
 		philo.each_philo_must_eat = ft_atoi(argv[5]);
+	}
 	else
+	{
 		philo.each_philo_must_eat = -1;
+	}
 	return (philo);
+}
+
+void	destory_all(t_philosophers_info info, t_platone *philo)
+{
+	int	i;
+
+	i = 0;
+	while (i < info.number_of_philosophers)
+	{
+/* 		pthread_mutex_destroy(&philo.);
+ */		i++;
+	}
+	exit(0);
 }
 
 static t_platone *platone_friends(t_platone *friends, int i)
 {
 	friends->index = i;
-	pthread_mutex_init(&friends->fork_lock, NULL);
-	pthread_mutex_init(&friends->mutex, NULL);
+ 	pthread_mutex_init(&friends->time_lock, NULL);
+ 	pthread_mutex_init(&friends->dead_lock, NULL);
+ 	pthread_mutex_init(&friends->fork_lock, NULL);
 	friends->state = ALIVE;
 	friends->last_meal = ft_get_time();
-	friends->fork = true;
 	friends->n_meals = 0;
 	friends->time_start = ft_get_time();
 	return (friends);
@@ -67,33 +102,8 @@ t_platone *init_platones(t_philosophers_info info)
 			break ;
 		tmp = (t_platone *)malloc(sizeof(t_platone));
 		friends->next = tmp;
-		tmp->prev = friends;
 		friends = tmp;
 	}
 	friends->next = tmp2;
-	tmp2->prev = friends;
 	return	(tmp2);
-}
-
-
-unsigned long	ft_get_time(void)
-{
-	struct timeval	t;
-
-	gettimeofday(&t, NULL);
-	return ((t.tv_sec * 1000) + (t.tv_usec / 1000));
-}
-
-bool all_philo_full(t_platone *philo)
-{
-	int i;
-
-	i = 0;
-	while (i != philo->info.number_of_philosophers)
-	{
-		if (philo->n_meals != philo->info.each_philo_must_eat)
-			return false;
-		i++;
-	}
-	return true;
 }

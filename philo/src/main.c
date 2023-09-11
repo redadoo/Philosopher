@@ -5,139 +5,109 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/09 12:17:57 by evocatur          #+#    #+#             */
-/*   Updated: 2023/09/11 16:53:19 by edoardo          ###   ########.fr       */
+/*   Created: 2023/09/11 17:12:13 by edoardo           #+#    #+#             */
+/*   Updated: 2023/09/11 19:41:07 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-#include <string.h>
 
-static bool	is_all_dead(t_platone *st)
+static int	all_philo_full(t_platone *philo)
 {
 	int	i;
 	int	count;
+	int	each_philo_must_eat;
 
-	i = 0;
+	pthread_mutex_lock(&philo->meal_lock);
+	each_philo_must_eat = philo->info.each_philo_must_eat;
 	count = 0;
-	while (i < st->info.number_of_philosophers)
+	i = 0;
+	if (philo->info.each_philo_must_eat != -1)
 	{
-		st = st->next;
-		if (st->state == DEAD)
-			count++;
-		i++;
+		while (i < philo->info.number_of_philosophers)
+		{
+			if (philo->n_meals == philo->info.each_philo_must_eat)
+				count++;
+			i++;
+			philo = philo->next;
+		}
+		printf("teset . %i\n",count);
+		if (count == philo->info.number_of_philosophers)
+		{
+			pthread_mutex_unlock(&philo->meal_lock);
+			exit(0);
+		}
 	}
-	if (count == st->info.number_of_philosophers)
-		return (true);
-	return (false);
+	pthread_mutex_unlock(&philo->meal_lock);
+	return (1);
 }
 
-
-
-void	*philo_routine(void *vargp)
+void	*philo_routine(void *t_arg)
 {
- 	t_platone		*philo;
+	t_platone	*philo;
 
-	philo = (t_platone *)vargp;
-	
-
+	philo = (t_platone *)t_arg;
 	if (philo->info.number_of_philosophers == 1)
 	{
-		ft_sleep(philo->info.time_to_die);
-		printf("%lu %i is dead\n", ft_get_time() - philo->time_start, philo->index);
-		philo->state = DEAD;
+		ft_sleep(philo->info.time_to_die, philo);
+		print_state("died\n", philo);
+		destory_all(philo->info, philo);
 	}
 	if (philo->index % 2 != 0)
 	{
-		ft_sleep(1);
+		usleep(15000);
 	}
-	while (philo->state != DEAD)
+	while (dead_platone(philo))
 	{
-		pthread_mutex_lock(&philo->mutex);
-		if (philo->info.each_philo_must_eat == -1 && all_philo_full(philo) == true)
-		{
-			exit(0);
-		}
-		if (ft_get_time() - philo->last_meal >= philo->info.time_to_die)
-		{
- 			printf("test %lu\n", ft_get_time() - philo->time_start - philo->last_meal);
- 			printf("%lu %i died\n", ft_get_time() - philo->time_start, philo->index);
-			philo->state = DEAD;
-			if (philo->info.each_philo_must_eat == -1)
-			{
-				printf("capiamo\n");
-				exit(0);
-			}
-		}
-		if (philo->state != DEAD && philo->fork && philo->next->fork)
-		{
-			pthread_mutex_lock(&philo->fork_lock);
-			pthread_mutex_lock(&philo->next->fork_lock);
-			philo->fork = false;
-			philo->next->fork = false;
-			philo->state = EAT;
-		}
-		if (philo->state == EAT)
-		{
-			philo->n_meals++;
-			printf("%lu %i is eating\n", ft_get_time() -  philo->time_start,
-				philo->index);
-			ft_sleep(philo->info.time_to_eat);
-			philo->last_meal = ft_get_time();
-			philo->fork = true;
-			philo->next->fork = true;
-			pthread_mutex_unlock(&philo->fork_lock);
-			pthread_mutex_unlock(&philo->next->fork_lock);
-			usleep(100);
-			philo->state = SLEEP;
-			printf("%lu %i is sleeping\n", ft_get_time() -  philo->time_start,
-				philo->index);
-			ft_sleep(philo->info.time_to_sleep);
-			philo->state = ALIVE;
-		}
-		if (philo->state == ALIVE)
-		{
-			printf("%lu %i is thinking\n", ft_get_time() -  philo->time_start,
-				philo->index);
-			philo->state = THINK;
-		}
-		pthread_mutex_unlock(&philo->mutex); 
+		ft_eating(philo);
+		print_state("is thinking\n", philo);
+		all_philo_full(philo);
+	}
+}
+
+static void	create_threads(t_philosophers_info info, t_platone *philo)
+{
+	int	i;
+
+	i = 0;
+	while (i < info.number_of_philosophers)
+	{
+		pthread_create(&philo->newthread, NULL, philo_routine, philo);
+		philo = philo->next;
+		i++;
+	}
+}
+
+static void	join_threads(t_philosophers_info info, t_platone *philo)
+{
+	int	i;
+
+	i = 0;
+	while (i < info.number_of_philosophers)
+	{
+		pthread_join(philo->newthread, NULL);
+		philo = philo->next;
+		i++;
 	}
 }
 
 int	main(int argc, char **argv)
 {
-	int					i;
-	t_platone			*platone;
+	int i;
 	t_philosophers_info info;
-
+	t_platone *philo;
 	i = 0;
-	if (argc < 5 || argc > 6)
-		exit(0);
-	
+	if (argc != 5 && argc != 6)
+		return (0);
+	if (!check_arg(argv))
+		return (0);
+
 	info = init_info(info, argv);
-	platone = init_platones(info);
+	philo = init_platones(info);
 
-	while (i < info.number_of_philosophers)
-	{
-		pthread_create(&platone->newthread, NULL, philo_routine, platone);
-		platone = platone->next;
-		i++;
-	}
-	i = 0;
-	while (i < info.number_of_philosophers)
-	{
-		pthread_join(platone->newthread, NULL);
-		platone = platone->next;
-		i++;
-	}
-	i = 0;
-	while (i < info.number_of_philosophers)
-	{
-		pthread_mutex_destroy(&platone->fork_lock);
-		pthread_mutex_destroy(&platone->mutex);
-		platone = platone->next;
-		i++;
-	}
-	return (0);
+	create_threads(info, philo);
+	join_threads(info, philo);
+	destory_all(info, philo);
+
+	printf("inc\n");
 }

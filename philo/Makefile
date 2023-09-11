@@ -6,7 +6,7 @@
 #    By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/09 12:22:16 by evocatur          #+#    #+#              #
-#    Updated: 2023/09/11 16:23:03 by edoardo          ###   ########.fr        #
+#    Updated: 2023/09/11 19:19:47 by edoardo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ $(OBJ): $(SRCS)
 
 exe: all
 	@echo "     - Executing $(NAME)..."
-	@./$(NAME) 5 800 200 200
+	@./$(NAME)  5 800 200 200 7
 	@echo "     - Done -"
 
 leaks: all
