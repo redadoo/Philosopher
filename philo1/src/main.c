@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 12:17:57 by evocatur          #+#    #+#             */
-/*   Updated: 2023/09/11 16:53:19 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/11 16:51:25 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,19 @@ static bool	is_all_dead(t_platone *st)
 	return (false);
 }
 
+void monitoring(void *vargp)
+{
+	t_platone		*philo;
+
+	philo = (t_platone *)vargp;
+
+	while (1)
+	{
+		if (all_have_eat(philo) || dead_philo(philo))
+			break ;
+	}
+	
+}
 
 
 void	*philo_routine(void *vargp)
@@ -40,8 +53,12 @@ void	*philo_routine(void *vargp)
 
 	philo = (t_platone *)vargp;
 	
-
-	if (philo->info.number_of_philosophers == 1)
+	if (philo->index % 2 != 0)
+	{
+		ft_sleep(1);
+	}
+	
+/*	if (philo->info.number_of_philosophers == 1)
 	{
 		ft_sleep(philo->info.time_to_die);
 		printf("%lu %i is dead\n", ft_get_time() - philo->time_start, philo->index);
@@ -102,12 +119,13 @@ void	*philo_routine(void *vargp)
 			philo->state = THINK;
 		}
 		pthread_mutex_unlock(&philo->mutex); 
-	}
+	}*/
 }
 
 int	main(int argc, char **argv)
 {
 	int					i;
+	pthread_t			observer;
 	t_platone			*platone;
 	t_philosophers_info info;
 
@@ -118,6 +136,7 @@ int	main(int argc, char **argv)
 	info = init_info(info, argv);
 	platone = init_platones(info);
 
+	pthread_create(&observer, NULL, &monitoring, platone);
 	while (i < info.number_of_philosophers)
 	{
 		pthread_create(&platone->newthread, NULL, philo_routine, platone);
@@ -125,12 +144,14 @@ int	main(int argc, char **argv)
 		i++;
 	}
 	i = 0;
+	pthread_join(observer, NULL);
 	while (i < info.number_of_philosophers)
 	{
 		pthread_join(platone->newthread, NULL);
 		platone = platone->next;
 		i++;
 	}
+	pthread_exit(&platone->newthread);
 	i = 0;
 	while (i < info.number_of_philosophers)
 	{
