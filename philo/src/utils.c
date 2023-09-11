@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:39:52 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/11 19:26:43 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/11 20:36:17 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ int	ft_atoi(const char *nptr)
 	return (result);
 }
 
-t_philosophers_info init_info(t_philosophers_info philo, char **argv)
+t_philosophers_info	init_info(t_philosophers_info philo, char **argv)
 {
-    philo.number_of_philosophers = ft_atoi(argv[1]);
+	philo.number_of_philosophers = ft_atoi(argv[1]);
 	philo.time_to_die = ft_atoi(argv[2]);
 	philo.time_to_eat = ft_atoi(argv[3]);
 	philo.time_to_sleep = ft_atoi(argv[4]);
@@ -63,18 +63,17 @@ void	destory_all(t_philosophers_info info, t_platone *philo)
 	i = 0;
 	while (i < info.number_of_philosophers)
 	{
-/* 		pthread_mutex_destroy(&philo.);
- */		i++;
+		i++;
 	}
 	exit(0);
 }
 
-static t_platone *platone_friends(t_platone *friends, int i)
+static t_platone	*platone_friends(t_platone *friends, int i)
 {
 	friends->index = i;
- 	pthread_mutex_init(&friends->time_lock, NULL);
- 	pthread_mutex_init(&friends->dead_lock, NULL);
- 	pthread_mutex_init(&friends->fork_lock, NULL);
+	pthread_mutex_init(&friends->time_lock, NULL);
+	pthread_mutex_init(&friends->dead_lock, NULL);
+	pthread_mutex_init(&friends->fork_lock, NULL);
 	friends->state = ALIVE;
 	friends->last_meal = ft_get_time();
 	friends->n_meals = 0;
@@ -82,13 +81,13 @@ static t_platone *platone_friends(t_platone *friends, int i)
 	return (friends);
 }
 
-t_platone *init_platones(t_philosophers_info info)
+t_platone	*init_platones(t_philosophers_info info)
 {
 	int			i;
 	t_platone	*friends;
 	t_platone	*tmp2;
 	t_platone	*tmp;
-	
+
 	i = -1;
 	friends = (t_platone *)malloc(sizeof(t_platone));
 	if (!friends)
@@ -105,5 +104,5 @@ t_platone *init_platones(t_philosophers_info info)
 		friends = tmp;
 	}
 	friends->next = tmp2;
-	return	(tmp2);
+	return (tmp2);
 }
