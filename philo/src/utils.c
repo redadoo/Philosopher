@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:39:52 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/12 19:58:57 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/12 22:19:47 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,25 @@ int	ft_atoi(const char *nptr)
 	return (result);
 }
 
-t_philosophers_info	init_info(t_philosophers_info info, char **argv)
+t_philosophers_info	*init_info(char **argv)
 {
-	pthread_mutex_init(&info.check_lock, NULL);
-	pthread_mutex_init(&info.death_lock, NULL);
-	info.number_of_philosophers = ft_atoi(argv[1]);
-	info.time_to_die = ft_atoi(argv[2]);
-	info.time_to_eat = ft_atoi(argv[3]);
-	info.time_to_sleep = ft_atoi(argv[4]);
-	info.died = 0;
+	t_philosophers_info	* info;
+
+	info = (t_philosophers_info	*)malloc(sizeof(t_philosophers_info));
+	pthread_mutex_init(&info->check_lock, NULL);
+	pthread_mutex_init(&info->death_lock, NULL);
+	info->number_of_philosophers = ft_atoi(argv[1]);
+	info->time_to_die = ft_atoi(argv[2]);
+	info->time_to_eat = ft_atoi(argv[3]);
+	info->time_to_sleep = ft_atoi(argv[4]);
+	info->died = 0;
 	if (argv[5] != 0)
 	{
-		info.each_philo_must_eat = ft_atoi(argv[5]);
+		info->each_philo_must_eat = ft_atoi(argv[5]);
 	}
 	else
 	{
-		info.each_philo_must_eat = -1;
+		info->each_philo_must_eat = -1;
 	}
 	return (info);
 }
@@ -73,7 +76,7 @@ static t_platone	*platone_friends(t_platone *friends, int i)
 	return (friends);
 }
 
-t_platone	*init_platones(t_philosophers_info info)
+t_platone	*init_platones(t_philosophers_info *info)
 {
 	int			i;
 	t_platone	*friends;
@@ -85,11 +88,11 @@ t_platone	*init_platones(t_philosophers_info info)
 	if (!friends)
 		return (NULL);
 	tmp2 = friends;
-	while (++i < info.number_of_philosophers)
+	while (++i < info->number_of_philosophers)
 	{
 		friends = platone_friends(friends, i);
 		friends->info = info;
-		if (i == info.number_of_philosophers - 1)
+		if (i == info->number_of_philosophers - 1)
 			break ;
 		tmp = (t_platone *)malloc(sizeof(t_platone));
 		if (!tmp)

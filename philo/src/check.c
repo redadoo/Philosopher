@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check.c                                            :+:      :+:    :+:   */
+/*   check->c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: edoardo <edoardo@student->42->fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:13:24 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/12 22:10:57 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/12 22:10:57 by edoardo          ###   ########->fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,15 @@ void ft_end(t_platone *philo)
 {
 	while (1)
 	{
-		pthread_mutex_lock(&philo->info.check_lock);
-		if (philo->info.died == DEAD)
+		pthread_mutex_lock(&philo->info->check_lock);
+		if (philo->info->died == DEAD)
 		{
-			pthread_mutex_unlock(&philo->info.check_lock);
+			pthread_mutex_unlock(&philo->info->check_lock);
 			usleep(100);
 			return ;
 		}
 		usleep(200);
-		pthread_mutex_unlock(&philo->info.check_lock);
+		pthread_mutex_unlock(&philo->info->check_lock);
 	}
 }
 
@@ -65,7 +65,7 @@ void free_list(t_platone **philo)
 	t_platone	*tmp;
 
 	i = 0;
-	d = (*philo)->info.number_of_philosophers;
+	d = (*philo)->info->number_of_philosophers;
 	while (i < d)
 	{
 		tmp = (*philo);

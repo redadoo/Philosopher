@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 12:15:46 by evocatur          #+#    #+#             */
-/*   Updated: 2023/09/12 22:07:00 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/12 22:19:52 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,15 @@ typedef struct s_platone
 	pthread_mutex_t		meal_lock;
 	struct s_platone	*next;
 	pthread_t			newthread;
-	t_philosophers_info	info;
+	t_philosophers_info	*info;
 }						t_platone;
 
 void					ft_sleep(size_t milliseconds, t_platone *philo);
 unsigned long			ft_get_time(void);
 void					*philo_routine(void *vargp);
-t_platone				*init_platones(t_philosophers_info info);
+t_platone				*init_platones(t_philosophers_info *info);
 int						ft_atoi(const char *nptr);
-t_philosophers_info		init_info(t_philosophers_info info, char **argv);
+t_philosophers_info		*init_info(char **argv);
 bool					check_arg(char **argv);
 void					exit_prog(void);
 int						all_philo_full(t_platone *philo);
@@ -67,7 +67,6 @@ void					print_state(char *str, t_platone *philo);
 void					destory_all(t_platone *philo);
 bool					dead_platone(t_platone *philo);
 void					ft_eating(t_platone *philo);
-void					join_threads(t_philosophers_info info, t_platone *philo);
 void					ft_end(t_platone *philo);
 bool					all_have_eat(t_platone *philo);
 bool					dead_philo(t_platone *philo);
