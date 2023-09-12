@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:48:38 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/12 16:57:26 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/12 17:49:43 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ bool	dead_platone(t_platone *philo)
 	pthread_mutex_lock(&philo->dead_lock);
 	if (ft_get_time() - philo->last_meal > philo->info.time_to_die)
 	{
-		print_state("died\n", philo);
+		print_state("adied\n", philo);
 		philo->info.died = DEAD;
 		pthread_mutex_unlock(&philo->dead_lock);
 		return (false);
@@ -52,6 +52,7 @@ bool	dead_platone(t_platone *philo)
 
 void	ft_eating(t_platone *philo)
 {
+	dead_platone(philo);
 	pthread_mutex_lock(&philo->fork_lock);
 	pthread_mutex_lock(&philo->next->fork_lock);
 	print_state("has taken a fork\n", philo);
@@ -66,4 +67,5 @@ void	ft_eating(t_platone *philo)
 	pthread_mutex_unlock(&philo->next->fork_lock);
 	print_state("is sleeping\n", philo);
 	ft_sleep(philo->info.time_to_sleep, philo);
+	dead_platone(philo);
 }

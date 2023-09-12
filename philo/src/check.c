@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:13:24 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/12 17:04:30 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/12 17:36:05 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,26 +44,18 @@ bool	check_arg(char **argv)
 
 void ft_end(t_platone *philo)
 {
-	int i;
-
-	i = -1;
-	pthread_mutex_lock(&philo->info.check_lock);
 	while (1)
 	{
-
-		while (++i < philo->info.number_of_philosophers)
+		pthread_mutex_lock(&philo->info.check_lock);
+		if (philo->info.died == DEAD)
 		{
-			if (philo->state == DEAD)
-			{
-				pthread_mutex_unlock(&philo->info.check_lock);
-				usleep(100);
-				break ;
-			}
+			pthread_mutex_unlock(&philo->info.check_lock);
+			usleep(100);
+			return ;
 		}
-		i = -1;
 		usleep(200);
+		pthread_mutex_unlock(&philo->info.check_lock);
 	}
-	pthread_mutex_unlock(&philo->info.check_lock);
 }
 
 void free_list(t_platone *philo)

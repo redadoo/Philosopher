@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:12:13 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/12 17:04:15 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/12 17:55:12 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	*philo_routine(void *t_arg)
 	if (philo->info.number_of_philosophers == 1)
 	{
 		while (dead_platone(philo));
-		printf("falo %i\n",philo->info.died);
 		return NULL;
 	}
 	else
@@ -108,5 +107,6 @@ int	main(int argc, char **argv)
 	create_threads(info, philo);
 	ft_end(philo);
 	join_threads(philo->info, philo);
+	printf("ooo\n");
 	free_list(philo);
 }
