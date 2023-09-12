@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:48:38 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/12 19:52:07 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/12 21:57:17 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_sleep(size_t milliseconds, t_platone *philo)
 {
-	size_t	start;
+	unsigned long	start;
 
 	start = ft_get_time();
 	while (dead_platone(philo) && (ft_get_time() - start) < milliseconds)
@@ -39,14 +39,15 @@ void	print_state(char *str, t_platone *philo)
 bool	dead_platone(t_platone *philo)
 {
 	pthread_mutex_lock(&philo->dead_lock);
-	if (philo->info.died != DEAD && ft_get_time() - philo->last_meal > philo->info.time_to_die)
+	if (philo->info.time_to_die < ft_get_time() - philo->last_meal)
 	{
-		print_state("died\n", philo);
+		printf("x:%i ",philo->index);
 		philo->info.died = DEAD;
+		print_state("died\n", philo);
 		pthread_mutex_unlock(&philo->dead_lock);
 		return (false);
 	}
-	if (philo->info.each_philo_must_eat == -1 && philo->info.died != 0)
+	else if (philo->info.each_philo_must_eat == -1 && philo->info.died != 0)
 	{
 		pthread_mutex_unlock(&philo->dead_lock);
 		return (false);
@@ -67,6 +68,7 @@ void	ft_eating(t_platone *philo)
 	philo->n_meals++;
 	philo->last_meal = ft_get_time();
 	all_philo_full(philo);
-	pthread_mutex_unlock(&philo->fork_lock);
+/* 	dead_platone(philo);
+ */	pthread_mutex_unlock(&philo->fork_lock);
 	pthread_mutex_unlock(&philo->next->fork_lock);
 }

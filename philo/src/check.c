@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:13:24 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/12 17:36:05 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/12 22:10:57 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,24 +58,22 @@ void ft_end(t_platone *philo)
 	}
 }
 
-void free_list(t_platone *philo)
+void free_list(t_platone **philo)
 {
 	int			i;
 	int			d;
 	t_platone	*tmp;
 
 	i = 0;
-	d = philo->info.number_of_philosophers;
-	while (philo->index != 0)
-		philo = philo->next;
+	d = (*philo)->info.number_of_philosophers;
 	while (i < d)
 	{
-		tmp = philo;
-		pthread_mutex_destroy(&philo->dead_lock);
-		pthread_mutex_destroy(&philo->meal_lock);
-		pthread_mutex_destroy(&philo->time_lock);
-		pthread_mutex_destroy(&philo->fork_lock);
-		philo = philo->next;
+		tmp = (*philo);
+		pthread_mutex_destroy(&(*philo)->dead_lock);
+		pthread_mutex_destroy(&(*philo)->meal_lock);
+		pthread_mutex_destroy(&(*philo)->time_lock);
+		pthread_mutex_destroy(&(*philo)->fork_lock);
+		(*philo) = (*philo)->next;
 		free(tmp);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:39:52 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/12 16:57:26 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/12 19:58:57 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	ft_atoi(const char *nptr)
 t_philosophers_info	init_info(t_philosophers_info info, char **argv)
 {
 	pthread_mutex_init(&info.check_lock, NULL);
+	pthread_mutex_init(&info.death_lock, NULL);
 	info.number_of_philosophers = ft_atoi(argv[1]);
 	info.time_to_die = ft_atoi(argv[2]);
 	info.time_to_eat = ft_atoi(argv[3]);

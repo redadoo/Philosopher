@@ -6,7 +6,7 @@
 #    By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/09 12:22:16 by evocatur          #+#    #+#              #
-#    Updated: 2023/09/12 19:25:10 by edoardo          ###   ########.fr        #
+#    Updated: 2023/09/12 22:10:18 by edoardo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@echo "     - Compiling $(NAME)..." 
-	@${CC} -pthread $(FLAGS) $(OBJ) -o $(NAME)
+	@${CC} -pthread -lpthread $(FLAGS) $(OBJ) -o $(NAME)
 	@echo "- Compiled -"
 	@${RM} $(OBJ)
 	
@@ -38,7 +38,7 @@ $(OBJ): $(SRCS)
 
 exe: all
 	@echo "     - Executing $(NAME)..."
-	@./$(NAME)  2 100 200 200
+	@./$(NAME)  2 30 20 20
 	@echo "     - Done -"
 
 leaks: all
@@ -47,7 +47,7 @@ leaks: all
 	@echo "     - Done -"
 leaks1: all
 	@echo "     - Executing $(NAME) with leaks command..."
-	@valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) 1 800 200 200 7
+	@valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) 2 800 200 200 7
 	@echo "     - Done -"
 clean: 
 	@${RM} ${OBJ}
