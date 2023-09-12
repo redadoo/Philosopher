@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:12:13 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/12 17:55:12 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/12 19:51:31 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,13 @@ void	*philo_routine(void *t_arg)
 		while (dead_platone(philo))
 		{
 			ft_eating(philo);
-			print_state("is thinking\n", philo);
+			if(dead_platone(philo))
+			{
+				print_state("is sleeping\n", philo);
+				ft_sleep(philo->info.time_to_sleep, philo);
+			}
+			if(dead_platone(philo))
+				print_state("is thinking\n", philo);
 		}
 	}
 	
@@ -107,6 +113,5 @@ int	main(int argc, char **argv)
 	create_threads(info, philo);
 	ft_end(philo);
 	join_threads(philo->info, philo);
-	printf("ooo\n");
 	free_list(philo);
 }

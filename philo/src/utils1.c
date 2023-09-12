@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:48:38 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/12 17:49:43 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/12 19:52:07 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,15 @@ void	print_state(char *str, t_platone *philo)
 bool	dead_platone(t_platone *philo)
 {
 	pthread_mutex_lock(&philo->dead_lock);
-	if (ft_get_time() - philo->last_meal > philo->info.time_to_die)
+	if (philo->info.died != DEAD && ft_get_time() - philo->last_meal > philo->info.time_to_die)
 	{
-		print_state("adied\n", philo);
+		print_state("died\n", philo);
 		philo->info.died = DEAD;
+		pthread_mutex_unlock(&philo->dead_lock);
+		return (false);
+	}
+	if (philo->info.each_philo_must_eat == -1 && philo->info.died != 0)
+	{
 		pthread_mutex_unlock(&philo->dead_lock);
 		return (false);
 	}
@@ -57,7 +62,6 @@ void	ft_eating(t_platone *philo)
 	pthread_mutex_lock(&philo->next->fork_lock);
 	print_state("has taken a fork\n", philo);
 	print_state("has taken a fork\n", philo);
-	philo->state = EAT;
 	print_state("is eating\n", philo);
 	ft_sleep(philo->info.time_to_eat, philo);
 	philo->n_meals++;
@@ -65,7 +69,4 @@ void	ft_eating(t_platone *philo)
 	all_philo_full(philo);
 	pthread_mutex_unlock(&philo->fork_lock);
 	pthread_mutex_unlock(&philo->next->fork_lock);
-	print_state("is sleeping\n", philo);
-	ft_sleep(philo->info.time_to_sleep, philo);
-	dead_platone(philo);
 }

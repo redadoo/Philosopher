@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 12:15:46 by evocatur          #+#    #+#             */
-/*   Updated: 2023/09/12 17:04:09 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/12 19:43:05 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,6 @@ enum					e_state
 {
 	ALIVE = 0,
 	DEAD = 1,
-	THINK = 2,
-	SLEEP = 3,
-	EAT = 4,
 };
 
 typedef struct s_philosophers_info
