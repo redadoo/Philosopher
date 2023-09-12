@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check->c                                            :+:      :+:    :+:   */
+/*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edoardo <edoardo@student->42->fr>            +#+  +:+       +#+        */
+/*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/11 17:13:24 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/12 22:10:57 by edoardo          ###   ########->fr       */
+/*   Created: 2023/09/13 01:40:20 by edoardo           #+#    #+#             */
+/*   Updated: 2023/09/13 01:40:56 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,17 @@ bool	check_arg(char **argv)
 	return (true);
 }
 
-void ft_end(t_platone *philo)
+void	ft_end(t_platone *philo)
 {
 	while (1)
 	{
 		pthread_mutex_lock(&philo->info->check_lock);
-		if(all_philo_full(philo) == 0)
+		if (all_philo_full(philo) == 0)
 		{
 			pthread_mutex_unlock(&philo->info->check_lock);
 			return ;
 		}
-		if (philo->info->died == DEAD )
+		if (philo->info->died == DEAD)
 		{
 			pthread_mutex_unlock(&philo->info->check_lock);
 			usleep(100);
@@ -63,7 +63,7 @@ void ft_end(t_platone *philo)
 	}
 }
 
-void free_list(t_platone **philo)
+void	free_list(t_platone **philo)
 {
 	int			i;
 	int			d;

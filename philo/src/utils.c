@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:39:52 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/12 22:19:47 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/13 01:53:19 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ int	ft_atoi(const char *nptr)
 
 t_philosophers_info	*init_info(char **argv)
 {
-	t_philosophers_info	* info;
+	t_philosophers_info	*info;
 
-	info = (t_philosophers_info	*)malloc(sizeof(t_philosophers_info));
+	info = (t_philosophers_info *)malloc(sizeof(t_philosophers_info));
 	pthread_mutex_init(&info->check_lock, NULL);
 	pthread_mutex_init(&info->death_lock, NULL);
 	info->number_of_philosophers = ft_atoi(argv[1]);
@@ -102,4 +102,17 @@ t_platone	*init_platones(t_philosophers_info *info)
 	}
 	friends->next = tmp2;
 	return (tmp2);
+}
+
+bool	is_nietzsche_lonely(t_platone *nietzsche)
+{
+	if (nietzsche->info->number_of_philosophers == 1)
+	{
+		while (dead_platone(nietzsche))
+		{
+			nietzsche->info->number_of_philosophers = 1;
+		}
+		return (true);
+	}
+	return (false);
 }

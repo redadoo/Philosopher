@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:48:38 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/13 01:12:30 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/13 01:37:49 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_sleep(size_t milliseconds, t_platone *philo)
 	unsigned long	start;
 
 	start = ft_get_time();
-	while (dead_platone(philo)  && (ft_get_time() - start) < milliseconds)
+	while (dead_platone(philo) && (ft_get_time() - start) < milliseconds)
 		usleep(500);
 }
 

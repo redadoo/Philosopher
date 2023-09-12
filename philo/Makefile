@@ -6,7 +6,7 @@
 #    By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/09 12:22:16 by evocatur          #+#    #+#              #
-#    Updated: 2023/09/13 01:10:48 by edoardo          ###   ########.fr        #
+#    Updated: 2023/09/13 01:54:03 by edoardo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ $(OBJ): $(SRCS)
 
 exe: all
 	@echo "     - Executing $(NAME)..."
-	@./$(NAME)  2 800 200 200 7
+	@./$(NAME)  5 800 200 200 7
 	@echo "     - Done -"
 
 leaks: all
@@ -47,8 +47,12 @@ leaks: all
 	@echo "     - Done -"
 leaks1: all
 	@echo "     - Executing $(NAME) with leaks command..."
-	@valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) 2 800 200 200 7
+	@valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) 1 310 200 100
 	@echo "     - Done -"
+norm:
+	@norminette $(SRCS)
+	@norminette philosophers.h
+
 clean: 
 	@${RM} ${OBJ}
 

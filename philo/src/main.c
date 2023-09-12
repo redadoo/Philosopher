@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:12:13 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/13 01:26:59 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/13 01:53:27 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,12 @@ void	*philo_routine(void *t_arg)
 	t_platone	*philo;
 
 	philo = (t_platone *)t_arg;
-	if (philo->info->number_of_philosophers == 1)
-	{
-		while (dead_platone(philo))
-			;
+	if (is_nietzsche_lonely(philo))
 		return (NULL);
-	}
 	else
 	{
 		if (philo->index % 2 != 0)
-		{
 			usleep(15000);
-		}
 		while (dead_platone(philo))
 		{
 			if (!dead_platone(philo))
@@ -64,10 +58,10 @@ void	*philo_routine(void *t_arg)
 			ft_eating(philo);
 			if (!dead_platone(philo))
 				return (NULL);
-			print_state("is sleeping\n", philo);
-			ft_sleep(philo->info->time_to_sleep, philo);
 			if (all_philo_full(philo) == 0)
 				return (NULL);
+			print_state("is sleeping\n", philo);
+			ft_sleep(philo->info->time_to_sleep, philo);
 			if (!dead_platone(philo))
 				return (NULL);
 			print_state("is thinking\n", philo);
