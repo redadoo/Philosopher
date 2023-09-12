@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:12:13 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/12 22:24:23 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/13 01:26:59 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ int	all_philo_full(t_platone *philo)
 	int	count;
 	int	each_philo_must_eat;
 
-	pthread_mutex_lock(&philo->meal_lock);
 	count = 0;
 	i = 0;
+	pthread_mutex_lock(&philo->meal_lock);
 	if (philo->info->each_philo_must_eat != -1)
 	{
 		while (i < philo->info->number_of_philosophers)
@@ -30,14 +30,14 @@ int	all_philo_full(t_platone *philo)
 			if (count == philo->info->number_of_philosophers)
 			{
 				pthread_mutex_unlock(&philo->meal_lock);
-				exit(0);
+				return (0);
 			}
 			philo = philo->next;
 			i++;
 		}
 	}
 	pthread_mutex_unlock(&philo->meal_lock);
-	return (0);
+	return (1);
 }
 
 void	*philo_routine(void *t_arg)
@@ -47,8 +47,9 @@ void	*philo_routine(void *t_arg)
 	philo = (t_platone *)t_arg;
 	if (philo->info->number_of_philosophers == 1)
 	{
-		while (dead_platone(philo));
-		return NULL;
+		while (dead_platone(philo))
+			;
+		return (NULL);
 	}
 	else
 	{
@@ -58,19 +59,20 @@ void	*philo_routine(void *t_arg)
 		}
 		while (dead_platone(philo))
 		{
-			if(!dead_platone(philo))
-				return NULL;
+			if (!dead_platone(philo))
+				return (NULL);
 			ft_eating(philo);
-			if(!dead_platone(philo))
-				return NULL;
+			if (!dead_platone(philo))
+				return (NULL);
 			print_state("is sleeping\n", philo);
 			ft_sleep(philo->info->time_to_sleep, philo);
-			if(!dead_platone(philo))
-				return NULL;
+			if (all_philo_full(philo) == 0)
+				return (NULL);
+			if (!dead_platone(philo))
+				return (NULL);
 			print_state("is thinking\n", philo);
 		}
 	}
-	
 }
 
 static void	create_threads(t_philosophers_info *info, t_platone *philo)

@@ -47,7 +47,12 @@ void ft_end(t_platone *philo)
 	while (1)
 	{
 		pthread_mutex_lock(&philo->info->check_lock);
-		if (philo->info->died == DEAD)
+		if(all_philo_full(philo) == 0)
+		{
+			pthread_mutex_unlock(&philo->info->check_lock);
+			return ;
+		}
+		if (philo->info->died == DEAD )
 		{
 			pthread_mutex_unlock(&philo->info->check_lock);
 			usleep(100);
