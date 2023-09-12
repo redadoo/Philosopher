@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:48:38 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/11 20:23:56 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/12 16:57:26 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ bool	dead_platone(t_platone *philo)
 	pthread_mutex_lock(&philo->dead_lock);
 	if (ft_get_time() - philo->last_meal > philo->info.time_to_die)
 	{
-		pthread_mutex_unlock(&philo->dead_lock);
 		print_state("died\n", philo);
-		exit(0);
+		philo->info.died = DEAD;
+		pthread_mutex_unlock(&philo->dead_lock);
 		return (false);
 	}
 	pthread_mutex_unlock(&philo->dead_lock);

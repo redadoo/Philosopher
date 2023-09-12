@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:12:13 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/11 20:42:16 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/12 17:04:15 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	all_philo_full(t_platone *philo)
 			if (count == philo->info.number_of_philosophers)
 			{
 				pthread_mutex_unlock(&philo->meal_lock);
-				exit(0);
+				exit(0);//TODO : exit thread
 			}
 			philo = philo->next;
 			i++;
@@ -47,19 +47,23 @@ void	*philo_routine(void *t_arg)
 	philo = (t_platone *)t_arg;
 	if (philo->info.number_of_philosophers == 1)
 	{
-		ft_sleep(philo->info.time_to_die, philo);
-		print_state("died\n", philo);
-		destory_all(philo->info, philo);
+		while (dead_platone(philo));
+		printf("falo %i\n",philo->info.died);
+		return NULL;
 	}
-	if (philo->index % 2 != 0)
+	else
 	{
-		usleep(15000);
+		if (philo->index % 2 != 0)
+		{
+			usleep(15000);
+		}
+		while (dead_platone(philo))
+		{
+			ft_eating(philo);
+			print_state("is thinking\n", philo);
+		}
 	}
-	while (dead_platone(philo))
-	{
-		ft_eating(philo);
-		print_state("is thinking\n", philo);
-	}
+	
 }
 
 static void	create_threads(t_philosophers_info info, t_platone *philo)
@@ -75,7 +79,7 @@ static void	create_threads(t_philosophers_info info, t_platone *philo)
 	}
 }
 
-static void	join_threads(t_philosophers_info info, t_platone *philo)
+void	join_threads(t_philosophers_info info, t_platone *philo)
 {
 	int	i;
 
@@ -102,7 +106,7 @@ int	main(int argc, char **argv)
 	info = init_info(info, argv);
 	philo = init_platones(info);
 	create_threads(info, philo);
-	join_threads(info, philo);
-	destory_all(info, philo);
-	printf("inc\n");
+	ft_end(philo);
+	join_threads(philo->info, philo);
+	free_list(philo);
 }

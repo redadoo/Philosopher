@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 12:15:46 by evocatur          #+#    #+#             */
-/*   Updated: 2023/09/11 20:23:46 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/09/12 17:04:09 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,9 @@ typedef struct s_philosophers_info
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					each_philo_must_eat;
+	int					died;
+	pthread_mutex_t		death_lock;
+	pthread_mutex_t		check_lock;
 }						t_philosophers_info;
 
 typedef struct s_platone
@@ -44,13 +47,12 @@ typedef struct s_platone
 	unsigned long		last_meal;
 	unsigned long		time_start;
 	int					n_meals;
-	enum e_state		state;
+	int					state;
 	pthread_mutex_t		fork_lock;
 	pthread_mutex_t		time_lock;
 	pthread_mutex_t		dead_lock;
-	struct s_platone	*next;
 	pthread_mutex_t		meal_lock;
-	struct s_platone	*prev;
+	struct s_platone	*next;
 	pthread_t			newthread;
 	t_philosophers_info	info;
 }						t_platone;
@@ -60,17 +62,17 @@ unsigned long			ft_get_time(void);
 void					*philo_routine(void *vargp);
 t_platone				*init_platones(t_philosophers_info info);
 int						ft_atoi(const char *nptr);
-t_philosophers_info		init_info(t_philosophers_info p, char **argv);
+t_philosophers_info		init_info(t_philosophers_info info, char **argv);
 bool					check_arg(char **argv);
 void					exit_prog(void);
 int						all_philo_full(t_platone *philo);
 void					print_state(char *str, t_platone *philo);
-void					destory_all(t_philosophers_info info, t_platone *philo);
+void					destory_all(t_platone *philo);
 bool					dead_platone(t_platone *philo);
 void					ft_eating(t_platone *philo);
-/*                                */
-
+void					join_threads(t_philosophers_info info, t_platone *philo);
+void					ft_end(t_platone *philo);
 bool					all_have_eat(t_platone *philo);
 bool					dead_philo(t_platone *philo);
-
+void					free_list(t_platone *philo);
 #endif
