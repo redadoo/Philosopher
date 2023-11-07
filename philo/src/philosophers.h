@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 12:15:46 by evocatur          #+#    #+#             */
-/*   Updated: 2023/11/07 11:46:13 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/11/07 12:58:42 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int						ft_atoi(const char *nptr);
 t_philosophers_info		*init_info(char **argv);
 bool					check_arg(char **argv);
 void					print_state(char *str, t_platone *philo);
-bool					dead_platone(t_platone *philo);
 void					ft_eating(t_platone *philo);
 void					ft_end(t_platone *philo);
 void					free_list(t_platone **philo);

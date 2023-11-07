@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:12:13 by edoardo           #+#    #+#             */
-/*   Updated: 2023/11/07 11:45:55 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/11/07 13:08:45 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	*philo_routine(void *t_arg)
 	while (philo->info->died == 0)
 	{
 		ft_eating(philo);
+		
 		if(philo->info->all_eat == 1)
 			break ;
 		print_state("is sleeping\n", philo);

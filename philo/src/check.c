@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 01:40:20 by edoardo           #+#    #+#             */
-/*   Updated: 2023/11/07 11:47:10 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/11/07 13:05:21 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,25 +54,21 @@ void	ft_end(t_platone *philo)
 		x = 0;
 		while (i < philo->info->number_of_philosophers)
 		{
-			if (philo->info->each_philo_must_eat != -1 && philo->n_meals >= philo->info->each_philo_must_eat)
-				x++;
-			if (x == philo->info->number_of_philosophers)
-			{
-				philo->info->all_eat = 1;
-				return ; 
-			}
+			pthread_mutex_lock(&philo->meal_lock);
 			if (philo->info->time_to_die < ft_get_time() - philo->last_meal)
 			{
-				/* usleep(1); */
+				pthread_mutex_unlock(&philo->meal_lock);
 				print_state("died\n", philo);
+				pthread_mutex_lock(&philo->dead_lock);
 				philo->info->died = DEAD;
+				pthread_mutex_unlock(&philo->dead_lock);
 				return ;
 			}
-			if (philo->info->all_eat == 1)
-			{
-				usleep(100);
-				return ;
-			}
+			if (philo->info->each_philo_must_eat != -1 && philo->n_meals >= philo->info->each_philo_must_eat)
+				x++;
+			pthread_mutex_unlock(&philo->meal_lock);
+			if (x == philo->info->number_of_philosophers)
+				philo->info->all_eat = 1;
 			philo = philo->next;
 			i++;
 		}
