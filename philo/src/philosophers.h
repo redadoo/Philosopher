@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 12:15:46 by evocatur          #+#    #+#             */
-/*   Updated: 2023/09/13 01:49:25 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/11/07 11:46:13 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,12 @@ enum					e_state
 typedef struct s_philosophers_info
 {
 	int					number_of_philosophers;
-	int					time_to_die;
+	unsigned long		time_to_die;
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					each_philo_must_eat;
 	int					died;
-	pthread_mutex_t		death_lock;
-	pthread_mutex_t		check_lock;
+	int					all_eat;
 }						t_philosophers_info;
 
 typedef struct s_platone
@@ -44,7 +43,6 @@ typedef struct s_platone
 	unsigned long		last_meal;
 	unsigned long		time_start;
 	int					n_meals;
-	int					state;
 	pthread_mutex_t		fork_lock;
 	pthread_mutex_t		time_lock;
 	pthread_mutex_t		dead_lock;
@@ -61,15 +59,10 @@ t_platone				*init_platones(t_philosophers_info *info);
 int						ft_atoi(const char *nptr);
 t_philosophers_info		*init_info(char **argv);
 bool					check_arg(char **argv);
-void					exit_prog(void);
-int						all_philo_full(t_platone *philo);
 void					print_state(char *str, t_platone *philo);
-void					destory_all(t_platone *philo);
 bool					dead_platone(t_platone *philo);
 void					ft_eating(t_platone *philo);
 void					ft_end(t_platone *philo);
-bool					all_have_eat(t_platone *philo);
-bool					dead_philo(t_platone *philo);
 void					free_list(t_platone **philo);
 bool					is_nietzsche_lonely(t_platone *nietzsche);
 #endif

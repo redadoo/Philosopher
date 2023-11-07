@@ -6,11 +6,11 @@
 #    By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/09 12:22:16 by evocatur          #+#    #+#              #
-#    Updated: 2023/09/13 01:54:03 by edoardo          ###   ########.fr        #
+#    Updated: 2023/11/07 11:52:17 by edoardo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = philosophers
+NAME = philo
 
 SRCS = $(MAIN_SRC)
 
@@ -18,9 +18,9 @@ MAIN_SRC = src/*.c
 
 OBJ = *.o
 
-CC = gcc
+CC = gcc -fsanitize=thread
 
-CFLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror
 
 RM = rm -rf
 
@@ -34,7 +34,7 @@ $(NAME): $(OBJ)
 	
 $(OBJ): $(SRCS)
 	@echo "     - Making object files..." 
-	@${CC} -pthread -c $(SRCS)
+	@${CC} -pthread -c $(SRCS) $(FLAGS)
 
 exe: all
 	@echo "     - Executing $(NAME)..."
@@ -58,3 +58,5 @@ clean:
 
 fclean: clean
 	@${RM} ${NAME}
+
+re: fclean all

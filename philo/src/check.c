@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 01:40:20 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/13 01:40:56 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/11/07 11:47:10 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,22 +44,39 @@ bool	check_arg(char **argv)
 
 void	ft_end(t_platone *philo)
 {
-	while (1)
+	int	i;
+	int	x;
+
+	x = 0;
+	while (philo->info->all_eat == 0)
 	{
-		pthread_mutex_lock(&philo->info->check_lock);
-		if (all_philo_full(philo) == 0)
+		i = 0;
+		x = 0;
+		while (i < philo->info->number_of_philosophers)
 		{
-			pthread_mutex_unlock(&philo->info->check_lock);
-			return ;
-		}
-		if (philo->info->died == DEAD)
-		{
-			pthread_mutex_unlock(&philo->info->check_lock);
-			usleep(100);
-			return ;
+			if (philo->info->each_philo_must_eat != -1 && philo->n_meals >= philo->info->each_philo_must_eat)
+				x++;
+			if (x == philo->info->number_of_philosophers)
+			{
+				philo->info->all_eat = 1;
+				return ; 
+			}
+			if (philo->info->time_to_die < ft_get_time() - philo->last_meal)
+			{
+				/* usleep(1); */
+				print_state("died\n", philo);
+				philo->info->died = DEAD;
+				return ;
+			}
+			if (philo->info->all_eat == 1)
+			{
+				usleep(100);
+				return ;
+			}
+			philo = philo->next;
+			i++;
 		}
 		usleep(200);
-		pthread_mutex_unlock(&philo->info->check_lock);
 	}
 }
 

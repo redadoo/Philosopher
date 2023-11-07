@@ -6,39 +6,11 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:12:13 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/13 01:53:27 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/11/07 11:45:55 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-int	all_philo_full(t_platone *philo)
-{
-	int	i;
-	int	count;
-	int	each_philo_must_eat;
-
-	count = 0;
-	i = 0;
-	pthread_mutex_lock(&philo->meal_lock);
-	if (philo->info->each_philo_must_eat != -1)
-	{
-		while (i < philo->info->number_of_philosophers)
-		{
-			if (philo->n_meals >= philo->info->each_philo_must_eat)
-				count++;
-			if (count == philo->info->number_of_philosophers)
-			{
-				pthread_mutex_unlock(&philo->meal_lock);
-				return (0);
-			}
-			philo = philo->next;
-			i++;
-		}
-	}
-	pthread_mutex_unlock(&philo->meal_lock);
-	return (1);
-}
 
 void	*philo_routine(void *t_arg)
 {
@@ -47,26 +19,18 @@ void	*philo_routine(void *t_arg)
 	philo = (t_platone *)t_arg;
 	if (is_nietzsche_lonely(philo))
 		return (NULL);
-	else
+	if (philo->index % 2 != 0)
+		usleep(15000);
+	while (philo->info->died == 0)
 	{
-		if (philo->index % 2 != 0)
-			usleep(15000);
-		while (dead_platone(philo))
-		{
-			if (!dead_platone(philo))
-				return (NULL);
-			ft_eating(philo);
-			if (!dead_platone(philo))
-				return (NULL);
-			if (all_philo_full(philo) == 0)
-				return (NULL);
-			print_state("is sleeping\n", philo);
-			ft_sleep(philo->info->time_to_sleep, philo);
-			if (!dead_platone(philo))
-				return (NULL);
-			print_state("is thinking\n", philo);
-		}
+		ft_eating(philo);
+		if(philo->info->all_eat == 1)
+			break ;
+		print_state("is sleeping\n", philo);
+		ft_sleep(philo->info->time_to_sleep, philo);
+		print_state("is thinking\n", philo);
 	}
+	return (NULL);
 }
 
 static void	create_threads(t_philosophers_info *info, t_platone *philo)
@@ -97,11 +61,9 @@ static void	join_threads(t_philosophers_info *info, t_platone *philo)
 
 int	main(int argc, char **argv)
 {
-	int					i;
 	t_philosophers_info	*info;
 	t_platone			*philo;
 
-	i = 0;
 	if (argc != 5 && argc != 6)
 		return (0);
 	if (!check_arg(argv))

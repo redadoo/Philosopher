@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:39:52 by edoardo           #+#    #+#             */
-/*   Updated: 2023/09/13 01:53:19 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/11/05 17:28:37 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,16 @@ t_philosophers_info	*init_info(char **argv)
 	t_philosophers_info	*info;
 
 	info = (t_philosophers_info *)malloc(sizeof(t_philosophers_info));
-	pthread_mutex_init(&info->check_lock, NULL);
-	pthread_mutex_init(&info->death_lock, NULL);
 	info->number_of_philosophers = ft_atoi(argv[1]);
 	info->time_to_die = ft_atoi(argv[2]);
 	info->time_to_eat = ft_atoi(argv[3]);
 	info->time_to_sleep = ft_atoi(argv[4]);
+	info->all_eat = 0;
 	info->died = 0;
 	if (argv[5] != 0)
-	{
 		info->each_philo_must_eat = ft_atoi(argv[5]);
-	}
 	else
-	{
 		info->each_philo_must_eat = -1;
-	}
 	return (info);
 }
 
@@ -69,7 +64,6 @@ static t_platone	*platone_friends(t_platone *friends, int i)
 	pthread_mutex_init(&friends->dead_lock, NULL);
 	pthread_mutex_init(&friends->fork_lock, NULL);
 	pthread_mutex_init(&friends->meal_lock, NULL);
-	friends->state = ALIVE;
 	friends->last_meal = ft_get_time();
 	friends->n_meals = 0;
 	friends->time_start = ft_get_time();
@@ -100,7 +94,7 @@ t_platone	*init_platones(t_philosophers_info *info)
 		friends->next = tmp;
 		friends = tmp;
 	}
-	friends->next = tmp2;
+	friends->next = tmp2;	
 	return (tmp2);
 }
 
@@ -108,10 +102,7 @@ bool	is_nietzsche_lonely(t_platone *nietzsche)
 {
 	if (nietzsche->info->number_of_philosophers == 1)
 	{
-		while (dead_platone(nietzsche))
-		{
-			nietzsche->info->number_of_philosophers = 1;
-		}
+		ft_sleep(nietzsche->info->time_to_die, nietzsche);
 		return (true);
 	}
 	return (false);
