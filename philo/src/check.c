@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 01:40:20 by edoardo           #+#    #+#             */
-/*   Updated: 2023/11/07 13:05:21 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/11/07 16:53:05 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,11 @@ void	ft_end(t_platone *philo)
 				x++;
 			pthread_mutex_unlock(&philo->meal_lock);
 			if (x == philo->info->number_of_philosophers)
+			{
+				pthread_mutex_lock(&philo->meal_lock);
 				philo->info->all_eat = 1;
+				pthread_mutex_unlock(&philo->meal_lock);
+			}
 			philo = philo->next;
 			i++;
 		}
