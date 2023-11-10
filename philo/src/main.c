@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:12:13 by edoardo           #+#    #+#             */
-/*   Updated: 2023/11/07 16:24:37 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/11/08 21:29:37 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,13 @@ void	*philo_routine(void *t_arg)
 	while (philo->info->died == 0)
 	{
 		ft_eating(philo);
-		if(philo->info->all_eat == 1)
+		pthread_mutex_lock(&philo->test_lock);
+		if (philo->info->all_eat == 1)
+		{
+			pthread_mutex_unlock(&philo->test_lock);
 			break ;
+		}
+		pthread_mutex_unlock(&philo->test_lock);
 		print_state("is sleeping\n", philo);
 		ft_sleep(philo->info->time_to_sleep, philo);
 		print_state("is thinking\n", philo);

@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/09 12:15:46 by evocatur          #+#    #+#             */
-/*   Updated: 2023/11/07 12:58:42 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/11/08 00:24:15 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_platone
 	pthread_mutex_t		time_lock;
 	pthread_mutex_t		dead_lock;
 	pthread_mutex_t		meal_lock;
+	pthread_mutex_t		test_lock;
 	struct s_platone	*next;
 	pthread_t			newthread;
 	t_philosophers_info	*info;

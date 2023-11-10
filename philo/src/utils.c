@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:39:52 by edoardo           #+#    #+#             */
-/*   Updated: 2023/11/07 12:10:40 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/11/08 00:24:17 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ static t_platone	*platone_friends(t_platone *friends, int i)
 	pthread_mutex_init(&friends->dead_lock, NULL);
 	pthread_mutex_init(&friends->fork_lock, NULL);
 	pthread_mutex_init(&friends->meal_lock, NULL);
+	pthread_mutex_init(&friends->test_lock, NULL);
 	friends->last_meal = ft_get_time();
 	friends->n_meals = 0;
 	friends->time_start = ft_get_time();
