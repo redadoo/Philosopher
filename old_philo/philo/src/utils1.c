@@ -6,7 +6,7 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:48:38 by edoardo           #+#    #+#             */
-/*   Updated: 2023/11/10 12:45:04 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/11/12 17:10:58 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,18 +44,14 @@ void	ft_eating(t_platone *philo)
 {
 	pthread_mutex_lock(&philo->fork_lock);
 	pthread_mutex_lock(&philo->next->fork_lock);
-	
 	print_state("has taken a fork\n", philo);
 	print_state("has taken a fork\n", philo);
 	print_state("is eating\n", philo);
-
 	ft_sleep(philo->info->time_to_eat, philo);
-	
 	pthread_mutex_lock(&philo->meal_lock);
-	
 	philo->n_meals++;
 	philo->last_meal = ft_get_time();
-	
+	pthread_mutex_unlock(&philo->meal_lock);
 /* 	printf("\n Address of philo->last_meal : %p\n", &philo->last_meal);
 	printf("\n Address of philo->n_meals : %p\n", &philo->n_meals);
 	printf("\n Address of philo->info->time_to_eat : %p\n", &philo->info->all_eat);
@@ -63,7 +59,10 @@ void	ft_eating(t_platone *philo)
 	printf("\n Address of philo->fork_lock : %p\n", &philo->fork_lock);
 	printf("\n Address of philo->meal_lock->next->fork_lock : %p\n", &philo->next->fork_lock); */
 
-	pthread_mutex_unlock(&philo->meal_lock);
+	printf("\n Address of philo->meal_lock->next->fork_lock : %p\n", &philo->meal_lock);
+	printf("\n Address of philo->meal_lock->next->fork_lock : %p\n", &philo->fork_lock);
+	printf("\n Address of philo->meal_lock->next->fork_lock : %p\n", &philo->next->fork_lock);
+	
 	pthread_mutex_unlock(&philo->next->fork_lock);
 	pthread_mutex_unlock(&philo->fork_lock);
 }

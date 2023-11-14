@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/11 17:39:52 by edoardo           #+#    #+#             */
-/*   Updated: 2023/11/08 00:24:17 by edoardo          ###   ########.fr       */
+/*   Created: 2023/10/11 19:13:04 by fborroto          #+#    #+#             */
+/*   Updated: 2023/11/13 09:49:22 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,17 @@ t_philosophers_info	*init_info(char **argv)
 	info->time_to_die = ft_atoi(argv[2]);
 	info->time_to_eat = ft_atoi(argv[3]);
 	info->time_to_sleep = ft_atoi(argv[4]);
+	info->end = false;
 	info->all_eat = 0;
-	info->died = 0;
+	pthread_mutex_init(&info->monitoring_mutex, NULL);
 	if (argv[5] != 0)
+	{
 		info->each_philo_must_eat = ft_atoi(argv[5]);
+	}
 	else
+	{
 		info->each_philo_must_eat = -1;
+	}
 	return (info);
 }
 
@@ -61,13 +66,11 @@ static t_platone	*platone_friends(t_platone *friends, int i)
 {
 	friends->index = i;
 	pthread_mutex_init(&friends->time_lock, NULL);
-	pthread_mutex_init(&friends->dead_lock, NULL);
 	pthread_mutex_init(&friends->fork_lock, NULL);
 	pthread_mutex_init(&friends->meal_lock, NULL);
-	pthread_mutex_init(&friends->test_lock, NULL);
 	friends->last_meal = ft_get_time();
-	friends->n_meals = 0;
 	friends->time_start = ft_get_time();
+	friends->n_meals = 0;
 	return (friends);
 }
 
@@ -95,7 +98,7 @@ t_platone	*init_platones(t_philosophers_info *info)
 		friends->next = tmp;
 		friends = tmp;
 	}
-	friends->next = tmp2;	
+	friends->next = tmp2;
 	return (tmp2);
 }
 
@@ -103,7 +106,7 @@ bool	is_nietzsche_lonely(t_platone *nietzsche)
 {
 	if (nietzsche->info->number_of_philosophers == 1)
 	{
-		ft_sleep(nietzsche->info->time_to_die, nietzsche);
+		monitoring(nietzsche, FORK);
 		return (true);
 	}
 	return (false);

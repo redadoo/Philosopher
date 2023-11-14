@@ -6,11 +6,23 @@
 /*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:12:13 by edoardo           #+#    #+#             */
-/*   Updated: 2023/11/08 21:29:37 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/11/12 17:06:12 by edoardo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+bool monitoring(t_platone *philo)
+{
+	pthread_mutex_lock(&philo->info->monitoring_lock);
+	if (philo->info->program_end == true)
+	{
+		pthread_mutex_unlock(&philo->info->monitoring_lock);
+		return(true);
+	}
+	pthread_mutex_unlock(&philo->info->monitoring_lock);
+	return(false);
+}
 
 void	*philo_routine(void *t_arg)
 {
@@ -21,18 +33,39 @@ void	*philo_routine(void *t_arg)
 		return (NULL);
 	if (philo->index % 2 != 0)
 		usleep(15000);
-	while (philo->info->died == 0)
+	while (true)
 	{
-		ft_eating(philo);
-		pthread_mutex_lock(&philo->test_lock);
-		if (philo->info->all_eat == 1)
+		pthread_mutex_lock(&philo->info->monitoring_lock);
+		if (philo->info->program_end == true)
 		{
-			pthread_mutex_unlock(&philo->test_lock);
+			pthread_mutex_unlock(&philo->info->monitoring_lock);
 			break ;
 		}
-		pthread_mutex_unlock(&philo->test_lock);
+		pthread_mutex_unlock(&philo->info->monitoring_lock);
+		ft_eating(philo);
+		pthread_mutex_lock(&philo->info->monitoring_lock);
+		if (philo->info->program_end == true)
+		{
+			pthread_mutex_unlock(&philo->info->monitoring_lock);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->info->monitoring_lock);
 		print_state("is sleeping\n", philo);
+		pthread_mutex_lock(&philo->info->monitoring_lock);
+		if (philo->info->program_end == true)
+		{
+			pthread_mutex_unlock(&philo->info->monitoring_lock);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->info->monitoring_lock);
 		ft_sleep(philo->info->time_to_sleep, philo);
+		pthread_mutex_lock(&philo->info->monitoring_lock);
+		if (philo->info->program_end == true)
+		{
+			pthread_mutex_unlock(&philo->info->monitoring_lock);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->info->monitoring_lock);
 		print_state("is thinking\n", philo);
 	}
 	return (NULL);
