@@ -1,4 +1,0 @@
-# Philosopher
-
-
-MANGIARE DORMIRE PENSARE 
