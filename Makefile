@@ -44,7 +44,7 @@ exe: all
 
 leaks: all
 	@echo "     - Executing $(NAME) with leaks command..."
-	@valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) 5 800 200 200 7
+	@valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) 4 410 200 200 7
 	@echo "     - Done -"
 leaks1: all
 	@echo "     - Executing $(NAME) with leaks command..."

@@ -14,7 +14,7 @@
 
 void	take_forks(t_platone *philo)
 {
-	if (philo->info->number_of_philosophers % 2 == 0)
+	if (philo->index % 2 == 0)
 	{
 		pthread_mutex_lock(&philo->fork_lock);
 		monitoring(philo, FORK);
@@ -32,7 +32,7 @@ void	take_forks(t_platone *philo)
 
 void	drop_forks(t_platone *philo)
 {
-	if (philo->info->number_of_philosophers % 2 == 0)
+	if (philo->index % 2 == 0)
 	{
 		pthread_mutex_unlock(&philo->fork_lock);
 		monitoring(philo, DROP);

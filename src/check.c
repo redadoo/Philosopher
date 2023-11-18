@@ -52,8 +52,6 @@ static bool	is_philo_dead(t_platone *philo, int *satisfied_philos)
 static inline void	all_have_eaten(t_platone *philo)
 {
 	philo->info->end = true;
-	printf("Every Philosopher had %d meals!\n",
-		philo->info->each_philo_must_eat);
 	pthread_mutex_unlock(&philo->info->monitoring_mutex);
 }
 
