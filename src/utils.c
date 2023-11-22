@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: evocatur <evocatur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:13:04 by fborroto          #+#    #+#             */
-/*   Updated: 2023/11/13 09:49:22 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/11/22 14:57:16 by evocatur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,7 @@ t_philosophers_info	*init_info(char **argv)
 static t_platone	*platone_friends(t_platone *friends, int i)
 {
 	friends->index = i;
-	pthread_mutex_init(&friends->time_lock, NULL);
 	pthread_mutex_init(&friends->fork_lock, NULL);
-	pthread_mutex_init(&friends->meal_lock, NULL);
 	friends->last_meal = ft_get_time();
 	friends->time_start = ft_get_time();
 	friends->n_meals = 0;

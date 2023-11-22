@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: evocatur <evocatur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:12:49 by fborroto          #+#    #+#             */
-/*   Updated: 2023/11/13 13:32:36 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/11/18 17:21:25 by evocatur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	*philo_routine(void *t_arg)
 		monitoring(philo, SLEEP);
 		usleep(philo->info->time_to_sleep * 1000);
 		monitoring(philo, THINK);
+		usleep(200);
 	}
 	return (NULL);
 }
@@ -80,4 +81,5 @@ int	main(int argc, char **argv)
 	join_threads(philo->info, philo);
 	free_list(&philo);
 	free(info);
+	return (0);
 }

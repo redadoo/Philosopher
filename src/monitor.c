@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: evocatur <evocatur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 17:56:07 by fborroto          #+#    #+#             */
-/*   Updated: 2023/11/14 12:00:40 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/11/17 14:49:12 by evocatur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 void	monitoring(t_platone *philo, t_e_state event_id)
 {
 	suseconds_t	timestamp;
-	const char	*events[6]; 
+	const char	*events[6];
 
 	events[0] = DEAD_STR;
 	events[1] = EAT_STR;

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+         #
+#    By: evocatur <evocatur@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/11 19:13:32 by fborroto          #+#    #+#              #
-#    Updated: 2023/11/14 12:10:55 by edoardo          ###   ########.fr        #
+#    Updated: 2023/11/22 15:04:22 by evocatur         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ MAIN_SRC = src/*.c
 
 OBJ = *.o
 
-CC = gcc #-fsanitize=thread
+CC = gcc -fsanitize=thread
 
 CFLAGS = -Wall -Wextra -Werror
 
@@ -39,12 +39,12 @@ $(OBJ): $(SRCS)
 
 exe: all
 	@echo "     - Executing $(NAME)..."
-	@./$(NAME)  3 800 200 200 5
+	@./$(NAME)  5 800 200 200 7
 	@echo "     - Done -"
 
 leaks: all
 	@echo "     - Executing $(NAME) with leaks command..."
-	@valgrind --leak-check=full --show-leak-kinds=all ./$(NAME) 4 410 200 200 7
+	@valgrind ./$(NAME) 4 800 200 200 7
 	@echo "     - Done -"
 leaks1: all
 	@echo "     - Executing $(NAME) with leaks command..."
@@ -59,3 +59,5 @@ clean:
 
 fclean: clean
 	@${RM} ${NAME}
+
+re : fclean all

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: evocatur <evocatur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/11 19:12:57 by fborroto          #+#    #+#             */
-/*   Updated: 2023/11/13 09:49:24 by edoardo          ###   ########.fr       */
+/*   Updated: 2023/11/22 14:57:24 by evocatur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ typedef struct s_platone
 	unsigned long		time_start;
 	int					n_meals;
 	pthread_mutex_t		fork_lock;
-	pthread_mutex_t		time_lock;
-	pthread_mutex_t		meal_lock;
 	struct s_platone	*next;
 	pthread_t			newthread;
 	t_philosophers_info	*info;
@@ -63,7 +61,6 @@ t_platone				*init_platones(t_philosophers_info *info);
 int						ft_atoi(const char *nptr);
 t_philosophers_info		*init_info(char **argv);
 bool					check_arg(char **argv);
-void					exit_prog(void);
 int						all_philo_full(t_platone *philo);
 void					print_state(char *str, t_platone *philo);
 void					destory_all(t_platone *philo);
