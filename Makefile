@@ -3,39 +3,51 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: evocatur <evocatur@student.42.fr>          +#+  +:+       +#+         #
+#    By: edoardo <edoardo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/11 19:13:32 by fborroto          #+#    #+#              #
-#    Updated: 2023/11/22 15:04:22 by evocatur         ###   ########.fr        #
+#    Updated: 2024/04/13 17:52:59 by edoardo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
-NAME = philo
+NAME 			= philo
 
-SRCS = $(MAIN_SRC)
+CC			  	= gcc 
+FLAGS		  	= -pthread -lpthread -fsanitize=thread
+RM			  	= rm -rf
 
-MAIN_SRC = src/*.c
+OBJDIR        	= .objFiles
 
-OBJ = *.o
+MAIN_SRC		= src/main src/monitor src/check
+UTILS_SRC		= src/utils src/utils1 src/utils2
 
-CC = gcc -fsanitize=thread
 
-CFLAGS = -Wall -Wextra -Werror
+FILES 			= $(MAIN_SRC) $(UTILS_SRC)
 
-RM = rm -rf
+SRC			  	= $(FILES:=.c)
+OBJ			  	= $(addprefix $(OBJDIR)/, $(FILES:=.o))
+HEADER		  	= src/philosophers.h
+
+NONE			="\033[0m"
+GREEN			="\033[32m"
+GRAY			="\033[2;37m"
+CURSIVE			="\033[3m"
+YELLOW			="\033[1;33"
+
+.PHONY: all clean fclean re leaks
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	@echo "     - Compiling $(NAME)..." 
-	@${CC} -pthread -lpthread $(CFLAGS) $(OBJ) -o $(NAME)
-	@echo "- Compiled -"
-	@${RM} $(OBJ)
-	
-$(OBJ): $(SRCS)
-	@echo "     - Making object files..." 
-	@${CC} -pthread -c $(SRCS)
+$(NAME): $(OBJ) $(HEADER)
+	@echo $(CURSIVE) $(GRAY) "      - Making object files..." $(NONE)
+	@echo $(CURSIVE) $(GRAY) "     - Compiling $(NAME)..." $(NONE)
+	@$(CC)  $(FLAGS) $(OBJ) $(LINKS) -o $(NAME)
+	@echo $(GREEN)"- Compiled -"$(NONE)
+
+$(OBJDIR)/%.o: %.c $(HEADER)
+	@mkdir -p $(dir $@)
+	@$(CC) $(FLAGS) -c $< -o $@
 
 exe: all
 	@echo "     - Executing $(NAME)..."
@@ -54,8 +66,9 @@ norm:
 	@norminette $(SRCS)
 	@norminette philosophers.h
 
-clean: 
-	@${RM} ${OBJ}
+clean:
+	@$(RM) $(OBJDIR) $(OBJ)
+	@$(RM) leaks.txt
 
 fclean: clean
 	@${RM} ${NAME}
