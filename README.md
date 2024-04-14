@@ -12,6 +12,14 @@
 - [About](#about)
 - [Usage](#usage)
 
+## About
+
+This project is about learning how threads work by precisely timing a group of philosophers on when to pick up forks and eat spaghetti without dying from hunger.
+
+this project is part of the common core of 42.
+
+read [Subject](https://github.com/redadoo/Philosopher/blob/master/en.subject.pdf) for more info
+
 ## Objectives 
 
 Here are the things you need to know:
@@ -40,15 +48,6 @@ There is a large bowl of spaghetti in the middle of the table.
 • Philosophers don’t know if another philosopher is about to die.
 
 • No need to say that philosophers should avoid dying!
-
-
-## About
-
-This project is about learning how threads work by precisely timing a group of philosophers on when to pick up forks and eat spaghetti without dying from hunger.
-
-this project is part of the common core of 42.
-
-read [Subject](https://github.com/redadoo/Philosopher/blob/master/en.subject.pdf) for more info
 
 ## Usage
 
